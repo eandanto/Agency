@@ -20,7 +20,6 @@ namespace Agency.Application.DTOs
 
     public class LoginDto
     {
-        public Guid? Id { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
         public string UserOrCustomer { get; set; }

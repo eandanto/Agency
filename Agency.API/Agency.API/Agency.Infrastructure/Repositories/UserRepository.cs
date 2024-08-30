@@ -31,7 +31,7 @@ namespace Agency.Infrastructure.Repositories
         {
             try
             {
-                var user = await _context.Users.Where(x => x.EmailAddress == model.EmailAddress && x.PasswordHash == model.PasswordHash).FirstOrDefaultAsync();
+                var user = await _context.Users.Where(x => x.EmailAddress == model.EmailAddress && x.PasswordHash == model.PasswordHash && x.UserOrCustomer == model.UserOrCustomer).FirstOrDefaultAsync();
                 if (user == null)
                     throw new Exception("Incorrect Email Address or Password");
 

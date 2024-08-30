@@ -10,6 +10,6 @@ namespace Agency.Application.Interfaces
     public interface IUserService
     {
         Task<UserDto> Register(UserDto model);
-        Task<bool> Login(LoginDto model);
+        Task<string> Login(LoginDto model);
     }
 }
