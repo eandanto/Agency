@@ -22,11 +22,13 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     containerBuilder.RegisterType<UserService>().As<IUserService>();
     containerBuilder.RegisterType<ConfigurationService>().As<IConfigurationService>();
     containerBuilder.RegisterType<OffDayService>().As<IOffDayService>();
+    containerBuilder.RegisterType<AppointmentService>().As<IAppointmentService>();
 
     // Register repositories
     containerBuilder.RegisterType<UserRepository>().As<IUserRepository>();
     containerBuilder.RegisterType<ConfigurationRepository>().As<IConfigurationRepository>();
     containerBuilder.RegisterType<OffDayRepository>().As<IOffDayRepository>();
+    containerBuilder.RegisterType<AppointmentRepository>().As<IAppointmentRepository>();
 });
 
 var app = builder.Build();
