@@ -20,6 +20,8 @@ namespace Agency.Application.Services
 
         public async Task<bool> SetOffDay(OffDayDto model)
         {
+            if (model.Description == null)
+                throw new Exception("Description cannot be empty");
             if (model.Day == null)
                 throw new Exception("Date is not specified correctly");
 
