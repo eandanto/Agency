@@ -20,9 +20,11 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     // Register services
     containerBuilder.RegisterType<UserService>().As<IUserService>();
+    containerBuilder.RegisterType<ConfigurationService>().As<IConfigurationService>();
 
     // Register repositories
     containerBuilder.RegisterType<UserRepository>().As<IUserRepository>();
+    containerBuilder.RegisterType<ConfigurationRepository>().As<IConfigurationRepository>();
 });
 
 var app = builder.Build();

@@ -33,16 +33,10 @@ namespace Agency.Application.Services
             else
                 throw new Exception("User is not specified correctly");
 
-            User newUser = new User
-            {
-                Id = Guid.NewGuid(),
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                EmailAddress = model.EmailAddress,
-                PasswordHash = AppHelper.HashPassword(model.Password),
-                UserOrCustomer = model.UserOrCustomer.Trim().ToUpper()
-            };
-            var user = _mapper.Map<User>(newUser);
+            model.Id = Guid.NewGuid();
+            model.Password = AppHelper.HashPassword(model.Password);
+            
+            var user = _mapper.Map<User>(model);
             var newUserCreated = await _userRepository.Register(user);
             return _mapper.Map<UserDto>(newUserCreated);
         }
