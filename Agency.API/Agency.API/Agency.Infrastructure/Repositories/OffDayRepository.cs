@@ -29,7 +29,6 @@ namespace Agency.Infrastructure.Repositories
                 {
                     Id = Guid.NewGuid(),
                     Day = date,
-                    Description = ""
                 };
 
                 await _context.OffDays.AddAsync(newOffDay);

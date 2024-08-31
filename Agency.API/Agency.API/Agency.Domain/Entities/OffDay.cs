@@ -19,9 +19,6 @@ namespace Agency.Domain.Entities
         public Guid Id { get; set; }
         [Required]
         [DataMember]
-        public string Description { get; set; }
-        [Required]
-        [DataMember]
         public DateTime Day { get; set; }
     }
 }
