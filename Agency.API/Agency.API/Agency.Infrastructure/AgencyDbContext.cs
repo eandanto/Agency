@@ -13,5 +13,13 @@ namespace Agency.Infrastructure
         public AgencyDbContext(DbContextOptions<AgencyDbContext> options) : base(options)
         {
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseNpgsql("Your PostgreSQL connection string here");
+            }
+        }
     }
 }

@@ -5,8 +5,9 @@
 namespace Agency.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedInititalData : Migration
+    public partial class PostgresSeedData : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Seed Users
@@ -31,6 +32,7 @@ namespace Agency.Infrastructure.Migrations
                 });
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             // Optionally remove the seeded data if rolling back

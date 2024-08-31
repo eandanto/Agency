@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AgencyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add Swagger services
@@ -49,7 +49,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4200")  // Replace with your frontend's URL
+            builder.WithOrigins(["http://localhost:4200", "https://white-stone-051230f00.5.azurestaticapps.net/"])  // Replace with your frontend's URL
                    .AllowAnyHeader()
                    .AllowAnyMethod() 
                    .AllowCredentials();
