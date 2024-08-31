@@ -27,7 +27,7 @@ namespace Agency.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> Login(User model)
+        public async Task<User> Login(User model)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Agency.Infrastructure.Repositories
                 if (user == null)
                     throw new Exception("Incorrect Email Address or Password");
 
-                return true;
+                return user;
             }
             catch (Exception ex)
             {

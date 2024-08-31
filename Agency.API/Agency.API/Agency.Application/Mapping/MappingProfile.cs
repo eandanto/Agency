@@ -20,8 +20,9 @@ namespace Agency.Application.Mapping
             // Map from LoginDto to User entity
             CreateMap<LoginDto, User>()
                 .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
-                .ForMember(dest => dest.FirstName, opt => opt.Ignore())
-                .ForMember(dest => dest.LastName, opt => opt.Ignore());
+                .ForMember(dest => dest.FirstName, opt => opt.Ignore())  
+                .ForMember(dest => dest.LastName, opt => opt.Ignore())   
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
 
             // Map OffDayDto to OffDay entity
             CreateMap<OffDayDto, OffDay>()

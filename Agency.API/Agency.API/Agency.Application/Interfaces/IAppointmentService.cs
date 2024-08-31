@@ -11,5 +11,6 @@ namespace Agency.Application.Interfaces
     public interface IAppointmentService
     {
         Task<AppointmentDto> SetAppointment(AppointmentDto model);
+        Task<AppointmentListDto> GetMyAppointments(Guid id, int pageNo, int pageSize);
     }
 }

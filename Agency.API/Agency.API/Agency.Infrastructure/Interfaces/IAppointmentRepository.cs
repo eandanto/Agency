@@ -10,5 +10,7 @@ namespace Agency.Infrastructure.Interfaces
     public interface IAppointmentRepository
     {
         Task<Appointment> SetAppointment(Appointment appointment);
+        Task<List<Appointment>> GetMyAppointments(Guid id, int pageNo, int pageSize);
+        Task<int> GetMyAppointmentsCount(Guid id);
     }
 }

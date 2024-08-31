@@ -18,4 +18,10 @@ namespace Agency.Application.DTOs
         public DateTime AppointmentDate { get; set; }
         public DateTime InsertedAt { get; set; }
     }
+
+    public class AppointmentListDto
+    {
+        public List<AppointmentDto> Appointments { get; set; }
+        public int TotalCounts { get; set; }
+    }
 }

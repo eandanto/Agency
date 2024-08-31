@@ -34,7 +34,7 @@ namespace Agency.Application.Services
             if (model.UserOrCustomer != null)
             {
                 model.UserOrCustomer = model.UserOrCustomer.Trim().ToUpper();
-                if (model.UserOrCustomer != "CUSTOMER" || model.UserOrCustomer != "STAFF")
+                if (model.UserOrCustomer != "CUSTOMER" && model.UserOrCustomer != "STAFF")
                     throw new Exception("User is not specified correctly");
             }
             else
@@ -57,6 +57,7 @@ namespace Agency.Application.Services
                 if (model.Password == null)
                     throw new Exception("Password cannot be empty");
 
+                model.UserOrCustomer = model.UserOrCustomer.Trim().ToUpper();
                 model.Password = AppHelper.HashPassword(model.Password);
                 var user = _mapper.Map<User>(model);
                 var userLoggedIn = await _userRepository.Login(user);
@@ -66,14 +67,19 @@ namespace Agency.Application.Services
                     // Generate JWT token
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+                    if (key.Length < 32)
+                    {
+                        throw new ArgumentException("The JWT key must be at least 32 characters long.");
+                    }
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new[]
                         {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.EmailAddress),
-                    // Add other claims as needed
-                }),
+                        new Claim(ClaimTypes.Name, userLoggedIn.Id.ToString()),
+                        new Claim(ClaimTypes.Email, user.EmailAddress),
+                        new Claim("UserOrCustomer", user.UserOrCustomer),
+                        new Claim("CustomerId", userLoggedIn.Id.ToString()),
+                    }),
                         Expires = DateTime.UtcNow.AddHours(1),
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                         Issuer = _configuration["Jwt:Issuer"],
@@ -82,6 +88,7 @@ namespace Agency.Application.Services
 
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     return tokenHandler.WriteToken(token);
+
                 }
                 throw new Exception("Invalid login credentials");
             }

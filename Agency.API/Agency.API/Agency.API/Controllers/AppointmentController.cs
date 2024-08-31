@@ -38,5 +38,21 @@ namespace Agency.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        // GET: api/Appointment/GetMyAppointments?id={id}pageNo=1&pageSize=10
+        [HttpGet("GetMyAppointments")]
+        public async Task<ActionResult<AppointmentListDto>> GetMyAppointments(Guid id, int pageNo = 0, int pageSize = 10)
+        {
+            try
+            {
+                var appointments = await _appointmentService.GetMyAppointments(id, pageNo, pageSize);
+                return Ok(appointments);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

@@ -24,19 +24,21 @@ namespace Agency.Infrastructure.Repositories
 
 
                 var appointmentCount = await _context.Appointments.Where(x => x.AppointmentDate == model.AppointmentDate).CountAsync();
-                if (appointmentCount > maxAppointmentPerDay)
+                if (appointmentCount >= maxAppointmentPerDay)
                 {
                     var isSearching = true;
                     DateTime nextAvailableDate = model.AppointmentDate;
                     while (isSearching)
                     {
-                        nextAvailableDate.AddDays(1);
+                        nextAvailableDate = nextAvailableDate.AddDays(1);
                         var appointmentCountDay = await _context.Appointments.Where(x => x.AppointmentDate == nextAvailableDate).CountAsync();
                         if (appointmentCountDay <= maxAppointmentPerDay)
                             isSearching = false;
                     }
                     model.AppointmentDate = nextAvailableDate;
                 }
+
+                model.Token = GenerateAppointmentToken(model.CustomerId, model.AppointmentDate);
 
                 await _context.Appointments.AddAsync(model);
                 await _context.SaveChangesAsync();
@@ -48,5 +50,33 @@ namespace Agency.Infrastructure.Repositories
                 throw;
             }
         }
+
+        public async Task<List<Appointment>> GetMyAppointments(Guid id, int pageNo, int pageSize)
+        {
+            return await _context.Appointments.Where(x => x.CustomerId == id).OrderByDescending(x => x.InsertedAt).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public async Task<int> GetMyAppointmentsCount(Guid id)
+        {
+            return await _context.Appointments.Where(x => x.CustomerId == id).CountAsync();
+        }
+
+        private string GenerateAppointmentToken(Guid customerId, DateTime appointmentDate)
+        {
+            using (var sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                // Combine the key components into a single string
+                string rawToken = $"{customerId}-{appointmentDate:yyyyMMddHHmmss}-{Guid.NewGuid()}";
+
+                // Compute the hash of the combined string
+                byte[] hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(rawToken));
+
+                // Encode the hash as a Base64 string and take the first 16 characters to shorten the token
+                string token = Convert.ToBase64String(hash).Replace("=", "").Replace("+", "").Replace("/", "").Substring(0, 16);
+
+                return token;
+            }
+        }
+
     }
 }

@@ -10,6 +10,6 @@ namespace Agency.Infrastructure.Interfaces
     public interface IUserRepository
     {
         Task<User> Register(User user);
-        Task<bool> Login(User user);
+        Task<User> Login(User user);
     }
 }

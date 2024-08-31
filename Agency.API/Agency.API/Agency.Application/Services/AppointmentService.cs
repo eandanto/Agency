@@ -21,13 +21,25 @@ namespace Agency.Application.Services
 
         public async Task<AppointmentDto> SetAppointment(AppointmentDto model)
         {
-            if (model.Id == null)
-                throw new Exception("Id cannot be null");
-
             model.Id = Guid.NewGuid();
+            model.InsertedAt = DateTime.Now;
+            if (model.AppointmentDate.Kind == DateTimeKind.Utc)
+                model.AppointmentDate = model.AppointmentDate.ToLocalTime();
             var appointment = _mapper.Map<Appointment>(model);
             var newAppointment = await _appointmentRepository.SetAppointment(appointment);
             return _mapper.Map<AppointmentDto>(newAppointment);
+        }
+
+        public async Task<AppointmentListDto> GetMyAppointments(Guid id, int pageNo, int pageSize)
+        {
+            var myAppointments = await _appointmentRepository.GetMyAppointments(id, pageNo, pageSize);
+            var totalCount = await _appointmentRepository.GetMyAppointmentsCount(id);
+
+            AppointmentListDto result = new AppointmentListDto();
+            result.Appointments = _mapper.Map<List<AppointmentDto>>(myAppointments);
+            result.TotalCounts = totalCount;
+
+            return result;
         }
     }
 }
