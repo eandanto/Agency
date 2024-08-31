@@ -28,8 +28,17 @@ namespace Agency.Application.Mapping
             CreateMap<OffDayDto, OffDay>()
                 .ReverseMap();
 
-            // Map AppointmentDto to Appointment entity
+            // Map from Appointment entity to AppointmentDto
+            CreateMap<Appointment, AppointmentDto>()
+                .ForMember(dest => dest.CustomerEmailAddress,
+                           opt => opt.MapFrom(src => src.Customer != null ? src.Customer.EmailAddress : null));
+
+            // Reverse map if needed (from AppointmentDto to Appointment)
             CreateMap<AppointmentDto, Appointment>()
+                .ForMember(dest => dest.Customer, opt => opt.Ignore());
+
+            // Map from ConfigurationDto to Configuration entity
+            CreateMap<ConfigurationDto, Configuration>()
                 .ReverseMap();
         }
     }

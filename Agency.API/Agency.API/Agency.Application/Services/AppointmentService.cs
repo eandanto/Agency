@@ -41,5 +41,17 @@ namespace Agency.Application.Services
 
             return result;
         }
+
+        public async Task<AppointmentListDto> GetAllAppointments(int pageNo, int pageSize, DateTime date)
+        {
+            var myAppointments = await _appointmentRepository.GetAllAppointments(pageNo, pageSize, date);
+            var totalCount = await _appointmentRepository.GetAllAppointmentsCount(date);
+
+            AppointmentListDto result = new AppointmentListDto();
+            result.Appointments = _mapper.Map<List<AppointmentDto>>(myAppointments);
+            result.TotalCounts = totalCount;
+
+            return result;
+        }
     }
 }

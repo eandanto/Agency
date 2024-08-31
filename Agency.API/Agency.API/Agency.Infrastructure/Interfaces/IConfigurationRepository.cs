@@ -1,4 +1,5 @@
 ﻿using Agency.Domain.Entities;
+using Agency.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace Agency.Infrastructure.Interfaces
 {
     public interface IConfigurationRepository
     {
-        Task<bool> SetConfiguration(Configuration configuration);
+        Task<bool> UpdateConfiguration(Configuration configuration);
+
+        Task<List<Configuration>> GetAllConfigurations();
     }
 }

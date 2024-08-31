@@ -9,6 +9,7 @@ namespace Agency.Application.Interfaces
 {
     public interface IConfigurationService
     {
-        Task<bool> SetConfiguration(ConfigurationDto model);
+        Task<bool> UpdateConfiguration(ConfigurationDto model);
+        Task<List<ConfigurationDto>> GetAllConfigurations();
     }
 }

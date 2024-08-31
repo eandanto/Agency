@@ -13,7 +13,7 @@ namespace Agency.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<bool> SetConfiguration(Configuration model)
+        public async Task<bool> UpdateConfiguration(Configuration model)
         {
             try
             {
@@ -31,6 +31,11 @@ namespace Agency.Infrastructure.Repositories
             {
                 throw;
             }
+        }
+
+        public async Task<List<Configuration>> GetAllConfigurations()
+        {
+            return await _context.Configurations.ToListAsync();
         }
     }
 }

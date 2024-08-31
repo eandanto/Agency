@@ -11,6 +11,7 @@ namespace Agency.Application.DTOs
     public class ConfigurationDto
     {
         public Guid Id { get; set; }
+        public string PropertyName { get; set; }
         public string Value { get; set; }
     }
 }

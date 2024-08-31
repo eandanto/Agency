@@ -22,6 +22,9 @@ namespace Agency.Infrastructure.Repositories
                     throw new Exception("Maximum appointments per day is not set");
                 int maxAppointmentPerDay = Convert.ToInt32(maxAppointmentPerDayQuery);
 
+                var isOffDay = await _context.OffDays.Where(x => x.Day == model.AppointmentDate).FirstOrDefaultAsync();
+                if (isOffDay != null)
+                    throw new Exception("Selected Date is an Off Day");
 
                 var appointmentCount = await _context.Appointments.Where(x => x.AppointmentDate == model.AppointmentDate).CountAsync();
                 if (appointmentCount >= maxAppointmentPerDay)
@@ -32,7 +35,8 @@ namespace Agency.Infrastructure.Repositories
                     {
                         nextAvailableDate = nextAvailableDate.AddDays(1);
                         var appointmentCountDay = await _context.Appointments.Where(x => x.AppointmentDate == nextAvailableDate).CountAsync();
-                        if (appointmentCountDay <= maxAppointmentPerDay)
+                        isOffDay = await _context.OffDays.Where(x => x.Day == nextAvailableDate).FirstOrDefaultAsync();
+                        if (appointmentCountDay <= maxAppointmentPerDay && isOffDay == null)
                             isSearching = false;
                     }
                     model.AppointmentDate = nextAvailableDate;
@@ -53,12 +57,22 @@ namespace Agency.Infrastructure.Repositories
 
         public async Task<List<Appointment>> GetMyAppointments(Guid id, int pageNo, int pageSize)
         {
-            return await _context.Appointments.Where(x => x.CustomerId == id).OrderByDescending(x => x.InsertedAt).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
+            return await _context.Appointments.Where(x => x.CustomerId == id).OrderByDescending(x => x.AppointmentDate).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task<int> GetMyAppointmentsCount(Guid id)
         {
             return await _context.Appointments.Where(x => x.CustomerId == id).CountAsync();
+        }
+
+        public async Task<List<Appointment>> GetAllAppointments(int pageNo, int pageSize, DateTime date)
+        {
+            return await _context.Appointments.Include(x => x.Customer).Where(x => x.AppointmentDate == date).OrderByDescending(x => x.AppointmentDate).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public async Task<int> GetAllAppointmentsCount(DateTime date)
+        {
+            return await _context.Appointments.Where(x => x.AppointmentDate == date).CountAsync();
         }
 
         private string GenerateAppointmentToken(Guid customerId, DateTime appointmentDate)

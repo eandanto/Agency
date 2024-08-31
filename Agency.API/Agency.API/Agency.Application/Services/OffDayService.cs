@@ -4,6 +4,8 @@ using Agency.Application.Interfaces;
 using Agency.Infrastructure.Interfaces;
 using AutoMapper;
 using System.Reflection;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Agency.Infrastructure.Repositories;
 
 namespace Agency.Application.Services
 {
@@ -18,15 +20,19 @@ namespace Agency.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> SetOffDay(OffDayDto model)
+        public async Task<bool> SetOffDay(DateTime date)
         {
-            if (model.Description == null)
-                throw new Exception("Description cannot be empty");
-            if (model.Day == null)
-                throw new Exception("Date is not specified correctly");
+            return await _offDayRepository.SetOffDay(date);
+        }
 
-            var offDay = _mapper.Map<OffDay>(model);
-            return await _offDayRepository.SetOffDay(offDay);
+        public async Task<List<OffDayDto>> GetOffDays()
+        {
+            var result = await _offDayRepository.GetOffDays();
+            return _mapper.Map<List<OffDayDto>>(result);
+        }
+        public async Task<bool> RemoveOffDay(DateTime date)
+        {
+            return await _offDayRepository.RemoveOffDay(date);
         }
     }
 }

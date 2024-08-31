@@ -4,6 +4,7 @@ using Agency.Application.Interfaces;
 using Agency.Infrastructure.Interfaces;
 using AutoMapper;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 namespace Agency.Application.Services
 {
@@ -18,13 +19,19 @@ namespace Agency.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> SetConfiguration(ConfigurationDto model)
+        public async Task<bool> UpdateConfiguration(ConfigurationDto model)
         {
             if (model.Id == null)
                 throw new Exception("Id cannot be null");
 
             var configuration = _mapper.Map<Configuration>(model);
-            return await _configurationRepository.SetConfiguration(configuration);
+            return await _configurationRepository.UpdateConfiguration(configuration);
+        }
+
+        public async Task<List<ConfigurationDto>> GetAllConfigurations()
+        {
+            var result = await _configurationRepository.GetAllConfigurations();
+            return _mapper.Map<List<ConfigurationDto>>(result);
         }
     }
 }

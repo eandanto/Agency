@@ -18,9 +18,8 @@ namespace Agency.API.Controllers
             _offDayService = offDayService;
         }
 
-        // POST: api/OffDay/SetOffDay
-        [HttpPost("SetOffDay")]
-        public async Task<ActionResult<bool>> SetOffDay(OffDayDto model)
+        [HttpGet("SetOffDay")]
+        public async Task<ActionResult<bool>> SetOffDay(DateTime date)
         {
             if (!ModelState.IsValid)
             {
@@ -29,7 +28,7 @@ namespace Agency.API.Controllers
 
             try
             {
-                var result = await _offDayService.SetOffDay(model);
+                var result = await _offDayService.SetOffDay(date);
                 if (result)
                 {
                     return Ok(result);
@@ -43,6 +42,42 @@ namespace Agency.API.Controllers
             {
                 // Log the exception if necessary
                 return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        // GET: api/OffDay/GetOffDays
+        [HttpGet("GetOffDays")]
+        public async Task<ActionResult<List<OffDayDto>>> GetOffDays()
+        {
+            try
+            {
+                var offDays = await _offDayService.GetOffDays();
+                return Ok(offDays);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // DELETE: api/OffDay/RemoveOffDay
+        [HttpGet("RemoveOffDay")]
+        public async Task<ActionResult<bool>> RemoveOffDay(DateTime date)
+        {
+            try
+            {
+                var result = await _offDayService.RemoveOffDay(date);
+                if (!result)
+                {
+                    return NotFound($"{date} is not an off day.");
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

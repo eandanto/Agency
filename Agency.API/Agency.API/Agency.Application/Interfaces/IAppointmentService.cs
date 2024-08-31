@@ -12,5 +12,6 @@ namespace Agency.Application.Interfaces
     {
         Task<AppointmentDto> SetAppointment(AppointmentDto model);
         Task<AppointmentListDto> GetMyAppointments(Guid id, int pageNo, int pageSize);
+        Task<AppointmentListDto> GetAllAppointments(int pageNo, int pageSize, DateTime date);
     }
 }

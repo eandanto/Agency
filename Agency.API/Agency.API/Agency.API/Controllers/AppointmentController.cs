@@ -54,5 +54,22 @@ namespace Agency.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        // GET: api/Appointment/GetAllAppointments?pageNo=1&pageSize=10&date=2024-09-01
+        [HttpGet("GetAllAppointments")]
+        public async Task<ActionResult<AppointmentListDto>> GetAllAppointments(int pageNo, int pageSize, DateTime date)
+        {
+            try
+            {
+                date = date.Date;
+                var appointments = await _appointmentService.GetAllAppointments(pageNo, pageSize, date);
+                return Ok(appointments);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

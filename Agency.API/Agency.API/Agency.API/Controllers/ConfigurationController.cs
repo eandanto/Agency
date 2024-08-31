@@ -18,31 +18,38 @@ namespace Agency.API.Controllers
             _configurationService = configurationService;
         }
 
-        // POST: api/Configuration/SetConfiguration
-        [HttpPost("SetConfiguration")]
-        public async Task<ActionResult<bool>> SetConfiguration(ConfigurationDto model)
+        [HttpGet("getConfigurations")]
+        public async Task<ActionResult<List<ConfigurationDto>>> GetConfigurations()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
-                var result = await _configurationService.SetConfiguration(model);
-                if (result)
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(new { message = "Failed to set configuration." });
-                }
+                var configs = await _configurationService.GetAllConfigurations();
+                return Ok(configs);
             }
             catch (Exception ex)
             {
-                // Log the exception if necessary
-                return BadRequest(new { message = ex.Message });
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("updateConfiguration")]
+        public async Task<ActionResult> UpdateConfiguration([FromBody] List<ConfigurationDto> configs)
+        {
+            try
+            {
+                if (configs == null)
+                    throw new Exception("Nothing to update");
+
+                for (int i = 0; i < configs.Count; i++)
+                {
+                    await _configurationService.UpdateConfiguration(configs[i]);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

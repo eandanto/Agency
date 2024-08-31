@@ -17,6 +17,7 @@ namespace Agency.Application.DTOs
         public string Token { get; set; }
         public DateTime AppointmentDate { get; set; }
         public DateTime InsertedAt { get; set; }
+        public string? CustomerEmailAddress { get; set; }
     }
 
     public class AppointmentListDto
