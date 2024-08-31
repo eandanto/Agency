@@ -49,7 +49,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins",
         builder =>
         {
-            builder.WithOrigins(["http://localhost:4200", "https://white-stone-051230f00.5.azurestaticapps.net/"])  // Replace with your frontend's URL
+            builder.WithOrigins("http://localhost:4200", "https://white-stone-051230f00.5.azurestaticapps.net/")  // Replace with your frontend's URL
                    .AllowAnyHeader()
                    .AllowAnyMethod() 
                    .AllowCredentials();
@@ -85,14 +85,14 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-
-    // Enable Swagger in development mode
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Agency API V1");
-    });
 }
+
+// Enable Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Agency API V1");
+});
 
 app.UseHttpsRedirection();
 
