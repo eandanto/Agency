@@ -19,10 +19,10 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release Agency.API/Agency.API/Agency.API/Agency.API.csproj
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o myapp
+        run: dotnet publish Agency.API/Agency.API/Agency.API/Agency.API.csproj -c Release -o myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
