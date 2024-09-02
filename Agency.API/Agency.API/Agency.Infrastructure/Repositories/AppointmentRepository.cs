@@ -36,7 +36,7 @@ namespace Agency.Infrastructure.Repositories
                         nextAvailableDate = nextAvailableDate.AddDays(1);
                         var appointmentCountDay = await _context.Appointments.Where(x => x.AppointmentDate == nextAvailableDate).CountAsync();
                         isOffDay = await _context.OffDays.Where(x => x.Day == nextAvailableDate).FirstOrDefaultAsync();
-                        if (appointmentCountDay <= maxAppointmentPerDay && isOffDay == null)
+                        if (appointmentCountDay < maxAppointmentPerDay && isOffDay == null)
                             isSearching = false;
                     }
                     model.AppointmentDate = nextAvailableDate;
