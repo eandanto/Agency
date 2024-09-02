@@ -72,7 +72,8 @@ namespace Agency.Infrastructure.Repositories
 
         public async Task<List<Appointment>> GetAllAppointments(int pageNo, int pageSize, DateTime date)
         {
-            return await _context.Appointments.Include(x => x.Customer).Where(x => x.AppointmentDate == date).OrderByDescending(x => x.AppointmentDate).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
+            //return await _context.Appointments.Include(x => x.Customer).Where(x => x.AppointmentDate == date).OrderByDescending(x => x.AppointmentDate).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
+            return await _context.Appointments.Include(x => x.Customer).OrderByDescending(x => x.AppointmentDate).Skip(pageNo * pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task<int> GetAllAppointmentsCount(DateTime date)
