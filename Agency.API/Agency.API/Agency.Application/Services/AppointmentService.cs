@@ -44,6 +44,7 @@ namespace Agency.Application.Services
         {
             if (date.Kind != DateTimeKind.Utc)
             {
+                date = date.Date;
                 date = DateTime.SpecifyKind(date, DateTimeKind.Local);
                 date = date.ToUniversalTime();
             }
