@@ -42,12 +42,9 @@ namespace Agency.Application.Services
 
         public async Task<AppointmentListDto> GetAllAppointments(int pageNo, int pageSize, DateTime date)
         {
-            if (date.Kind != DateTimeKind.Utc)
-            {
-                date = date.Date;
-                date = DateTime.SpecifyKind(date, DateTimeKind.Local);
-                date = date.ToUniversalTime();
-            }
+            date = date.Date;
+            date = DateTime.SpecifyKind(date, DateTimeKind.Local);
+            date = date.ToUniversalTime();
 
             var myAppointments = await _appointmentRepository.GetAllAppointments(pageNo, pageSize, date);
             var totalCount = await _appointmentRepository.GetAllAppointmentsCount(date);
