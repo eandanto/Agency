@@ -61,7 +61,6 @@ namespace Agency.API.Controllers
         {
             try
             {
-                date = date.Date;
                 var appointments = await _appointmentService.GetAllAppointments(pageNo, pageSize, date);
                 return Ok(appointments);
             }
