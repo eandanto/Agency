@@ -22,9 +22,7 @@ namespace Agency.Application.Services
         public async Task<AppointmentDto> SetAppointment(AppointmentDto model)
         {
             model.Id = Guid.NewGuid();
-            model.InsertedAt = DateTime.Now;
-            if (model.AppointmentDate.Kind == DateTimeKind.Utc)
-                model.AppointmentDate = model.AppointmentDate.ToLocalTime();
+            model.InsertedAt = DateTime.UtcNow;
             var appointment = _mapper.Map<Appointment>(model);
             var newAppointment = await _appointmentRepository.SetAppointment(appointment);
             return _mapper.Map<AppointmentDto>(newAppointment);
@@ -44,6 +42,12 @@ namespace Agency.Application.Services
 
         public async Task<AppointmentListDto> GetAllAppointments(int pageNo, int pageSize, DateTime date)
         {
+            if (date.Kind != DateTimeKind.Utc)
+            {
+                date = DateTime.SpecifyKind(date, DateTimeKind.Local);
+                date = date.ToUniversalTime();
+            }
+
             var myAppointments = await _appointmentRepository.GetAllAppointments(pageNo, pageSize, date);
             var totalCount = await _appointmentRepository.GetAllAppointmentsCount(date);
 

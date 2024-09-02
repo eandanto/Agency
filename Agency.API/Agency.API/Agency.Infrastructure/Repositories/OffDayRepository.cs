@@ -1,6 +1,7 @@
 ﻿using Agency.Domain.Entities;
 using Agency.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Agency.Infrastructure.Repositories
 {
@@ -49,7 +50,6 @@ namespace Agency.Infrastructure.Repositories
 
         public async Task<bool> RemoveOffDay(DateTime date)
         {
-            date = date.Date;
             var offDay = await _context.OffDays.Where(x => x.Day == date).FirstOrDefaultAsync();
             if (offDay == null)
                 throw new Exception("Selected Date is not an Off Day");

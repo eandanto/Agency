@@ -22,6 +22,11 @@ namespace Agency.Application.Services
 
         public async Task<bool> SetOffDay(DateTime date)
         {
+            if (date.Kind != DateTimeKind.Utc)
+            {
+                date = DateTime.SpecifyKind(date, DateTimeKind.Local);
+                date = date.ToUniversalTime();
+            }
             return await _offDayRepository.SetOffDay(date);
         }
 
